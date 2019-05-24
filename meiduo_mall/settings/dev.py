@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'meiduo_mall.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'meiduo12',
+        'NAME': 'demo1',
         'USER': 'root',
         'PASSWORD': '123456',
         'HOST': '127.0.0.1',
@@ -203,3 +203,6 @@ LOGGING = {
 }
 #指定用户模型类
 AUTH_USER_MODEL = 'users.User'
+
+#指定认证
+AUTHENTICATION_BACKENDS = ["meiduo_mall.utils.my_backend.MyBackend"]

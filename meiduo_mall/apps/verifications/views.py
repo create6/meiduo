@@ -51,14 +51,40 @@ class SmsCodeView(View):
         if image_code.lower() != redis_image_code.decode().lower():
             return http.JsonResponse({"errmsg": "图片验证码错误", "code":RET.DATAERR})
 
+        #判断是否频繁发送
+        send_flag = redis_conn.get("send_flag_%s"%mobile)
+        if send_flag:
+<<<<<<< HEAD
+            return http.JsonResponse({"errmsg":"短信验证码发送频繁","code":RET.SMSCODERR})
+=======
+            return http.JsonResponse({"errmsg":"频繁发送","code":RET.SMSCODERR})
+>>>>>>> 16c17939af697426590723567f4182e68a8b5837
+
         #3,发送短信
         sms_code = "%06d"%random.randint(0,999999)
         print("sms_code = %s"%sms_code)
+
+        import time
+        time.sleep(10)
         # ccp = CCP()
         # ccp.send_template_sms(mobile, [sms_code, constants.REDIS_SMS_CODE_EXPIRES/60], 1)
 
+        #使用celery发送短信
+        from celery_tasks.sms.tasks import send_sms_code
+        send_sms_code.delay(mobile,sms_code,constants.REDIS_SMS_CODE_EXPIRES/60)
+
         #保存到redis中
-        redis_conn.setex("sms_code_%s"%mobile,constants.REDIS_SMS_CODE_EXPIRES,sms_code)
+<<<<<<< HEAD
+        pipeline = redis_conn.pipeline() # 开启管道
+        pipeline.setex("sms_code_%s"%mobile,constants.REDIS_SMS_CODE_EXPIRES,sms_code)
+        pipeline.setex("send_flag_%s"%mobile,constants.SMS_SEND_FLAG,True)
+        pipeline.execute() # 提交管道
+=======
+        pipeline = redis_conn.pipeline()
+        pipeline.setex("sms_code_%s"%mobile,constants.REDIS_SMS_CODE_EXPIRES,sms_code)
+        pipeline.setex("send_flag_%s"%mobile,constants.REDIS_SEND_FLAG_EXPIRES,True)
+        pipeline.execute()
+>>>>>>> 16c17939af697426590723567f4182e68a8b5837
 
         #4,返回响应
         return http.JsonResponse({"errmsg":"发送成功","code":RET.OK})

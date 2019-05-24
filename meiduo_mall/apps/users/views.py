@@ -3,6 +3,8 @@ from django.views import View
 from django import http
 import re
 from .models import User
+from django.contrib.auth import authenticate, login
+
 
 class RegisterView(View):
     def get(self,request):
@@ -64,3 +66,42 @@ class CheckMobileView(View):
             "count":count
         }
         return http.JsonResponse(data)
+
+class LoginUserView(View):
+    def get(self,request):
+        return render(request,'login.html')
+
+    def post(self,request):
+        #1,获取参数
+        username = request.POST.get("username")
+        password = request.POST.get("pwd")
+        remembered = request.POST.get("remembered")
+
+        #2,校验参数
+        #2,1为空校验
+        if not all([username,password]):
+            return http.HttpResponseForbidden("参数不全")
+
+        #2,2判断用户名格式正确性
+        if not re.match(r'^[a-zA-Z0-9_-]{5,20}$',username):
+            return http.HttpResponseForbidden("用户名格式有误")
+
+        #2,3判断密码格式正确性
+        if not re.match(r'^[0-9A-Za-z]{8,20}$',password):
+            return http.HttpResponseForbidden("用户名格式有误")
+
+        #2,4判断账号密码正确性
+        user = authenticate(username=username,password=password)
+
+        if not user:
+            return render(request,'login.html',context={"loginerror":"fdfdfdf"})
+
+        #3,状态保持
+        login(request,user)
+
+        #设置状态保持的时间, 如果没有记住密码,浏览器会话结束退出; 如果记住了密码,默认保持两个星期
+        if remembered != "on":
+            request.session.set_expiry(0)
+
+        #4,返回响应
+        return http.HttpResponse("登陆成功")
