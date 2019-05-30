@@ -11,6 +11,7 @@ var vm = new Vue({
         carts: [], // 购物车数据,
         username:'',
     },
+    // mountedvue对象创建的时候就会自动执行
     mounted(){
         // 获取购物车数据
         // this.get_carts();

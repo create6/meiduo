@@ -4,16 +4,16 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <title>美多商城-登录</title>
-    <link rel="stylesheet" type="text/css" href="../static/css/reset.css">
-    <link rel="stylesheet" type="text/css" href="../static/css/main.css">
-    <script type="text/javascript" src="../static/js/host.js"></script>
-    <script type="text/javascript" src="../static/js/vue-2.5.16.js"></script>
-    <script type="text/javascript" src="../static/js/axios-0.18.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+    <script type="text/javascript" src="/static/js/host.js"></script>
+    <script type="text/javascript" src="/static/js/vue-2.5.16.js"></script>
+    <script type="text/javascript" src="/static/js/axios-0.18.0.min.js"></script>
 </head>
 <body>
 <div id="app" v-cloak>
     <div class="login_top clearfix">
-        <a href="../static/index.html" class="login_logo"><img src="../static/images/logo02.png"></a>
+        <a href="/static/index.html" class="login_logo"><img src="/static/images/logo02.png"></a>
     </div>
     <div class="login_form_bg">
         <div class="login_form_wrap clearfix">
@@ -36,12 +36,11 @@
                             <div class="more_input clearfix">
                                 <input type="checkbox" name="remembered" v-model="remembered">
                                 <label>记住登录</label>
-                                {% if loginerror %}
-                                    <span style="color:red;">&nbsp;&nbsp;{{ loginerror }}</span>
-                                {% endif %}
                             </div>
                             <input type="submit" value="登 录" class="input_submit">
-
+                            {% if loginerror %}
+                                <span class="error_tip2">{{ loginerror }}</span>
+                            {% endif %}
                         </form>
                     </div>
                 </div>
@@ -69,7 +68,7 @@
         <p>电话：010-****888 京ICP备*******8号</p>
     </div>
 </div>
-<script type="text/javascript" src="../static/js/common.js"></script>
-<script type="text/javascript" src="../static/js/login.js"></script>
+<script type="text/javascript" src="/static/js/common.js"></script>
+<script type="text/javascript" src="/static/js/login.js"></script>
 </body>
 </html>
